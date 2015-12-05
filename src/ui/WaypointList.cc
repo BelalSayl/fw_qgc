@@ -249,7 +249,7 @@ void WaypointList::refresh()
 {
     if (uas)
     {
-        WPM->readWaypoints(false);
+        WPM->readWaypoints(true);
     }
 }
 
