@@ -326,7 +326,7 @@ void HUD::updateAttitude(UASInterface* uas, double roll, double pitch, double ya
 {
     Q_UNUSED(uas);
     Q_UNUSED(timestamp);
-    if (!isnan(roll) && !isinf(roll) && !isnan(pitch) && !isinf(pitch) && !isnan(yaw) && !isinf(yaw))
+    if (!std::isnan(roll) && !std::isinf(roll) && !std::isnan(pitch) && !std::isinf(pitch) && !std::isnan(yaw) && !std::isinf(yaw))
     {
         this->roll = roll;
         this->pitch = pitch*3.35f; // Constant here is the 'focal length' of the projection onto the plane
@@ -338,7 +338,7 @@ void HUD::updateAttitude(UASInterface* uas, int component, double roll, double p
 {
     Q_UNUSED(uas);
     Q_UNUSED(timestamp);
-    if (!isnan(roll) && !isinf(roll) && !isnan(pitch) && !isinf(pitch) && !isnan(yaw) && !isinf(yaw))
+    if (!std::isnan(roll) && !std::isinf(roll) && !std::isnan(pitch) && !std::isinf(pitch) && !std::isnan(yaw) && !std::isinf(yaw))
     {
         attitudes.insert(component, QVector3D(roll, pitch*3.35f, yaw)); // Constant here is the 'focal length' of the projection onto the plane
     }
@@ -535,13 +535,13 @@ void HUD::paintHUD()
         // Low-pass roll, pitch and yaw
         rollLP = roll;//rollLP * 0.2f + 0.8f * roll;
         pitchLP = pitch;//pitchLP * 0.2f + 0.8f * pitch;
-        yawLP = (!isinf(yaw) && !isnan(yaw)) ? yaw : yawLP;//yawLP * 0.2f + 0.8f * yaw;
+        yawLP = (!std::isinf(yaw) && !std::isnan(yaw)) ? yaw : yawLP;//yawLP * 0.2f + 0.8f * yaw;
 
         // Translate for yaw
         const float maxYawTrans = 60.0f;
 
         float newYawDiff = yawDiff;
-        if (isinf(newYawDiff)) newYawDiff = yawDiff;
+        if (std::isinf(newYawDiff)) newYawDiff = yawDiff;
         if (newYawDiff > M_PI) newYawDiff = newYawDiff - M_PI;
 
         if (newYawDiff < -M_PI) newYawDiff = newYawDiff + M_PI;

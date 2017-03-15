@@ -38,7 +38,7 @@
 //#define NOMINMAX
 #include <limits>
 template<typename T>
-inline bool isnan(T value)
+inline bool std::isnan(T value)
 {
 	return value != value;
 
@@ -46,7 +46,7 @@ inline bool isnan(T value)
 
 // requires #include <limits>
 template<typename T>
-inline bool isinf(T value)
+inline bool std::isinf(T value)
 {
 	return (value == std::numeric_limits<T>::infinity() || (-1 * value) == std::numeric_limits<T>::infinity()) && std::numeric_limits<T>::has_infinity;
 }

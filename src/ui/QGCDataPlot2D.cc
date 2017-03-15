@@ -518,7 +518,7 @@ void QGCDataPlot2D::loadCsvLog(QString file, QString xAxisName, QString yAxisFil
                 {
                     bool okx = true;
                     x = text.toDouble(&okx);
-                    if (okx && !isnan(x) && !isinf(x))
+                    if (okx && !std::isnan(x) && !std::isinf(x))
                     {
                         headerfound = true;
                     }
@@ -544,7 +544,7 @@ void QGCDataPlot2D::loadCsvLog(QString file, QString xAxisName, QString yAxisFil
                         y = text.toDouble(&oky);
                         // Only INF is really an issue for the plot
                         // NaN is fine
-                        if (oky && !isnan(y) && !isinf(y) && text.length() > 0 && text != " " && text != "\n" && text != "\r" && text != "\t")
+                        if (oky && !std::isnan(y) && !std::isinf(y) && text.length() > 0 && text != " " && text != "\n" && text != "\r" && text != "\t")
                         {
                             // Only append definitely valid values
                             xValues.value(curveName)->append(x);

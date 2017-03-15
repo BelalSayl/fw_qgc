@@ -172,18 +172,18 @@ void HDDisplay::triggerUpdate()
 //    // UAS is not needed
 //    Q_UNUSED(uas);
 
-//    if (!isnan(value) && !isinf(value))
+//    if (!std::isnan(value) && !std::isinf(value))
 //    {
 //        // Update mean
 //        const float oldMean = valuesMean.value(name, 0.0f);
 //        const int meanCount = valuesCount.value(name, 0);
 //        double mean = (oldMean * meanCount +  value) / (meanCount + 1);
-//        if (isnan(mean) || isinf(mean)) mean = 0.0;
+//        if (std::isnan(mean) || std::isinf(mean)) mean = 0.0;
 //        valuesMean.insert(name, mean);
 //        valuesCount.insert(name, meanCount + 1);
 //        // Two-value sliding average
 //        double dot = (valuesDot.value(name) + (value - values.value(name, 0.0f)) / ((msec - lastUpdate.value(name, 0))/1000.0f))/2.0f;
-//        if (isnan(dot) || isinf(dot))
+//        if (std::isnan(dot) || std::isinf(dot))
 //        {
 //            dot = 0.0;
 //        }

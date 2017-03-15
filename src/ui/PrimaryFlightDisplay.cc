@@ -255,7 +255,7 @@ void PrimaryFlightDisplay::updateAttitude(UASInterface* uas, double roll, double
     Q_UNUSED(uas);
     Q_UNUSED(timestamp);
 
-        if (isinf(roll)) {
+        if (std::isinf(roll)) {
             this->roll = std::numeric_limits<double>::quiet_NaN();
         } else {
 
@@ -268,7 +268,7 @@ void PrimaryFlightDisplay::updateAttitude(UASInterface* uas, double roll, double
             this->roll = rolldeg;
         }
 
-        if (isinf(pitch)) {
+        if (std::isinf(pitch)) {
             this->pitch = std::numeric_limits<double>::quiet_NaN();
         } else {
 
@@ -281,7 +281,7 @@ void PrimaryFlightDisplay::updateAttitude(UASInterface* uas, double roll, double
             this->pitch = pitchdeg;
         }
 
-        if (isinf(yaw)) {
+        if (std::isinf(yaw)) {
             this->heading = std::numeric_limits<double>::quiet_NaN();
         } else {
 
@@ -480,7 +480,7 @@ void PrimaryFlightDisplay::fillInstrumentOpagueBackground(QPainter& painter, QRe
 }
 
 qreal pitchAngleToTranslation(qreal viewHeight, float pitch) {
-    if (isnan(pitch))
+    if (std::isnan(pitch))
         return 0;
     return pitch * viewHeight / PITCHTRANSLATION;
 }
@@ -542,7 +542,7 @@ void PrimaryFlightDisplay::drawAIGlobalFeatures(
         QRectF paintArea) {
 
     float displayRoll = this->roll;
-    if (isnan(displayRoll))
+    if (std::isnan(displayRoll))
         displayRoll = 0;
 
     painter.resetTransform();
@@ -616,7 +616,7 @@ void PrimaryFlightDisplay::drawPitchScale(
     Q_UNUSED(intrusion);
     
     float displayPitch = this->pitch;
-    if (isnan(displayPitch))
+    if (std::isnan(displayPitch))
         displayPitch = 0;
 
     // The area should be quadratic but if not width is the major size.
@@ -665,7 +665,7 @@ void PrimaryFlightDisplay::drawPitchScale(
             else if (displayDegrees<-90) displayDegrees = -180 - displayDegrees;
             if (SHOW_ZERO_ON_SCALES || degrees) {
                 QString s_number;
-                if (isnan(this->pitch))
+                if (std::isnan(this->pitch))
                     s_number.sprintf("-");
                 else
                     s_number.sprintf("%d", displayDegrees);
@@ -730,7 +730,7 @@ void PrimaryFlightDisplay::drawAIAttitudeScales(
         float intrusion
         ) {
     float displayRoll = this->roll;
-    if (isnan(displayRoll))
+    if (std::isnan(displayRoll))
         displayRoll = 0;
     // To save computations, we do these transformations once for both scales:
     painter.resetTransform();
@@ -745,7 +745,7 @@ void PrimaryFlightDisplay::drawAIAttitudeScales(
 
 void PrimaryFlightDisplay::drawAICompassDisk(QPainter& painter, QRectF area, float halfspan) {
     float displayHeading = this->heading;
-    if (isnan(displayHeading))
+    if (std::isnan(displayHeading))
         displayHeading = 0;
 
     float start = displayHeading - halfspan;
@@ -781,7 +781,7 @@ void PrimaryFlightDisplay::drawAICompassDisk(QPainter& painter, QRectF area, flo
         bool isMajor = displayTick % COMPASS_DISK_MAJORTICK == 0;
 
         // If heading unknown, still draw marks but no numbers.
-        if (!isnan(this->heading) &&
+        if (!std::isnan(this->heading) &&
                 (displayTick==30 || displayTick==60 ||
                 displayTick==120 || displayTick==150 ||
                 displayTick==210 || displayTick==240 ||
@@ -806,7 +806,7 @@ void PrimaryFlightDisplay::drawAICompassDisk(QPainter& painter, QRectF area, flo
                     drewArrow = true;
                 }
                 // If heading unknown, still draw marks but no N S E W.
-                if (!isnan(this->heading) && displayTick%90 == 0) {
+                if (!std::isnan(this->heading) && displayTick%90 == 0) {
                     // Also draw a label
                     QString name = compassWindNames[displayTick / 45];
                     painter.setPen(scalePen);
@@ -846,7 +846,7 @@ void PrimaryFlightDisplay::drawAICompassDisk(QPainter& painter, QRectF area, flo
 
     QString s_digitalCompass;
 
-    if (isnan(this->heading))
+    if (std::isnan(this->heading))
         s_digitalCompass.sprintf("---");
     else {
     /* final safeguard for really stupid systems */
@@ -862,7 +862,7 @@ void PrimaryFlightDisplay::drawAICompassDisk(QPainter& painter, QRectF area, flo
     drawTextCenter(painter, s_digitalCompass, largeTextSize, 0, -radius*0.38-digitalCompassUpshift);
 
     // The CDI
-    if (shouldDisplayNavigationData() && !isnan(navigationTargetBearing) && !isinf(navigationCrosstrackError)) {
+    if (shouldDisplayNavigationData() && !std::isnan(navigationTargetBearing) && !std::isinf(navigationCrosstrackError)) {
         painter.resetTransform();
         painter.translate(area.center());
         // TODO : Sign might be wrong?
@@ -917,7 +917,7 @@ void PrimaryFlightDisplay::drawAltimeter(
     float effectiveHalfHeight = h*0.45;
 
     // not yet implemented: Display of secondary altitude.
-    if (!isnan(secondaryAltitude)) {
+    if (!std::isnan(secondaryAltitude)) {
         effectiveHalfHeight -= secondaryAltitudeBoxHeight;
     }
 
@@ -930,7 +930,7 @@ void PrimaryFlightDisplay::drawAltimeter(
     float numbersLeft = 0.42*w;
     float markerTip = (tickmarkLeft*2+tickmarkRightMajor)/3;
 	float markerOffset = 0.2* markerHalfHeight;
-	float scaleCenterAltitude = isnan(primaryAltitude) ? 0 : primaryAltitude;
+	float scaleCenterAltitude = std::isnan(primaryAltitude) ? 0 : primaryAltitude;
 	
     // altitude scale
     float start = scaleCenterAltitude - ALTIMETER_LINEAR_SPAN/2;
@@ -963,7 +963,7 @@ void PrimaryFlightDisplay::drawAltimeter(
 	primaryMarkerPath.closeSubpath();
 
 	QPainterPath secondaryMarkerPath(QPoint(markerTip + markerHalfHeight, markerHalfHeight + markerOffset));
-	if (!isnan(climbRate)) {
+	if (!std::isnan(climbRate)) {
 		secondaryMarkerPath.lineTo(markerTip + markerHalfHeight, 2 * markerHalfHeight + markerOffset);
 		secondaryMarkerPath.lineTo(rightEdge, 2 * markerHalfHeight + markerOffset);
 		secondaryMarkerPath.lineTo(rightEdge, 1 * markerHalfHeight + markerOffset);
@@ -979,14 +979,14 @@ void PrimaryFlightDisplay::drawAltimeter(
 
     painter.setBrush(Qt::SolidPattern);
     painter.drawPath(primaryMarkerPath);
-	if (!isnan(climbRate)) painter.drawPath(secondaryMarkerPath);
+	if (!std::isnan(climbRate)) painter.drawPath(secondaryMarkerPath);
     painter.setBrush(Qt::NoBrush);
 
     pen.setColor(Qt::white);
     painter.setPen(pen);
 	
     QString s_alt;
-    if (isnan(primaryAltitude))
+    if (std::isnan(primaryAltitude))
         s_alt.sprintf("---");
     else
         s_alt.sprintf("h:%3.0f", primaryAltitude);
@@ -994,7 +994,7 @@ void PrimaryFlightDisplay::drawAltimeter(
     drawTextRightCenter(painter, s_alt, mediumTextSize, rightEdge - 4 * lineWidth, 0);
 
     // draw simple in-tape VVI.
-    if (!isnan(climbRate)) {
+    if (!std::isnan(climbRate)) {
 		// Draw label
 		QString s_climb;
 		s_climb.sprintf("vZ:%2.1f", climbRate);
@@ -1025,7 +1025,7 @@ void PrimaryFlightDisplay::drawAltimeter(
     }
 
     // print secondary altitude
-    if (!isnan(secondaryAltitude)) {
+    if (!std::isnan(secondaryAltitude)) {
         QRectF saBox(area.x(), area.y()-secondaryAltitudeBoxHeight, w, secondaryAltitudeBoxHeight);
         painter.resetTransform();
         painter.translate(saBox.center());
@@ -1059,10 +1059,10 @@ void PrimaryFlightDisplay::drawVelocityMeter(
 	float markerOffset = 0.2 * markerHalfHeight;
 
 	// Select between air and ground speed:
-	bool bSpeedIsAirspeed = (isAirplane() && !isnan(airSpeed));
+	bool bSpeedIsAirspeed = (isAirplane() && !std::isnan(airSpeed));
 	float primarySpeed = bSpeedIsAirspeed ? airSpeed : groundSpeed;
 	float secondarySpeed = !bSpeedIsAirspeed ? airSpeed : groundSpeed;
-	float centerScaleSpeed = isnan(primarySpeed) ? 0 : primarySpeed;
+	float centerScaleSpeed = std::isnan(primarySpeed) ? 0 : primarySpeed;
 	
 	float start = centerScaleSpeed - AIRSPEED_LINEAR_SPAN / 2;
 	float end = centerScaleSpeed + AIRSPEED_LINEAR_SPAN / 2;
@@ -1099,7 +1099,7 @@ void PrimaryFlightDisplay::drawVelocityMeter(
 	primaryMarkerPath.closeSubpath();
 
 	QPainterPath secondaryMarkerPath(QPoint(markerTip - markerHalfHeight, 1 * markerHalfHeight + markerOffset));
-	if (!isnan(secondarySpeed)) {
+	if (!std::isnan(secondarySpeed)) {
 		secondaryMarkerPath.lineTo(markerTip - markerHalfHeight, 2 * markerHalfHeight + markerOffset);
 		secondaryMarkerPath.lineTo(leftEdge, 2 * markerHalfHeight + markerOffset);
 		secondaryMarkerPath.lineTo(leftEdge, 1 * markerHalfHeight + markerOffset);
@@ -1115,21 +1115,21 @@ void PrimaryFlightDisplay::drawVelocityMeter(
 
 	painter.setBrush(Qt::SolidPattern);
 	painter.drawPath(primaryMarkerPath);
-	if (!isnan(secondarySpeed)) painter.drawPath(secondaryMarkerPath);
+	if (!std::isnan(secondarySpeed)) painter.drawPath(secondaryMarkerPath);
 	painter.setBrush(Qt::NoBrush);
 
 	// Draw primary speed
 	pen.setColor(Qt::white);
 	painter.setPen(pen);
 	QString s_alt;
-	if (isnan(primarySpeed))
+	if (std::isnan(primarySpeed))
 		s_alt.sprintf("---");
 	else
 		s_alt.sprintf("%s:%3.1f", (bSpeedIsAirspeed ? "AS" : "GS"), primarySpeed);
 	drawTextLeftCenter(painter, s_alt, mediumTextSize, 4 * lineWidth, 0);
 
 	// Draw secondary speed
-	if (!isnan(secondarySpeed)) {
+	if (!std::isnan(secondarySpeed)) {
 		pen.setColor(Qt::white);
 		painter.setPen(pen);
 		s_alt.sprintf("%s:%3.1f", (!bSpeedIsAirspeed ? "AS" : "GS"), secondarySpeed);

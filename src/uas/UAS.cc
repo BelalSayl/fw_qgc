@@ -785,7 +785,7 @@ void UAS::receiveMessage(LinkInterface* link, mavlink_message_t message)
 
             setAltitudeAMSL(hud.alt);
             setGroundSpeed(hud.groundspeed);
-            if (!isnan(hud.airspeed))
+            if (!std::isnan(hud.airspeed))
                 setAirSpeed(hud.airspeed);
             speedZ = -hud.climb;
             emit altitudeChanged(this, altitudeAMSL, altitudeWGS84, altitudeRelative, -speedZ, time);
@@ -912,7 +912,7 @@ void UAS::receiveMessage(LinkInterface* link, mavlink_message_t message)
 
                     float vel = pos.vel/100.0f;
                     // Smaller than threshold and not NaN
-                    if ((vel < 1000000) && !isnan(vel) && !isinf(vel)) {
+                    if ((vel < 1000000) && !std::isnan(vel) && !std::isinf(vel)) {
                         setGroundSpeed(vel);
                         emit speedChanged(this, groundSpeed, airSpeed, time);
                     } else {
@@ -2625,8 +2625,8 @@ void UAS::setManualControlCommands(float roll, float pitch, float yaw, float thr
             sendCommand = true;
             countSinceLastTransmission = 0;
         }
-        else if ((!isnan(roll) && roll != manualRollAngle) || (!isnan(pitch) && pitch != manualPitchAngle) ||
-                   (!isnan(yaw) && yaw != manualYawAngle) || (!isnan(thrust) && thrust != manualThrust) ||
+        else if ((!std::isnan(roll) && roll != manualRollAngle) || (!std::isnan(pitch) && pitch != manualPitchAngle) ||
+                   (!std::isnan(yaw) && yaw != manualYawAngle) || (!std::isnan(thrust) && thrust != manualThrust) ||
                    buttons != manualButtons)
         {
             sendCommand = true;
